@@ -1,32 +1,63 @@
-import mongoose from "mongoose";
-
-const Products = mongoose.model('Product', { name: String, price: Number, desc: String });
-
-const product = new Products({name:"San pham A",price: 200, desc: "Day la mo ta"});
-
-
-// List products
-export const list = async (req, res) => { 
-    res.json(product);
-}
-export const read = (req, res) => {
-    res.json(product.find(item => item.id === +req.params.id));
-}
+import product from "../model/product";
 
 // API thêm sản phẩm
 export const create = async (req, res) => {
     try {
-        const product = await new Products(req.body).save();
-        res.json(product)    
+        const products = await new product(req.body).save();
+        res.json(products)    
     } catch (error) {
         res.status(400).json({
-            message: "Not allow to add"
+            message: "Không thêm được sản phẩm anh ei"
         })
     }
 }
-export const remove = (req, res) => {
-    res.json(product.filter(item => item.id !== +req.params.id));
+// API list sản phẩm
+export const list = async (req, res) => { 
+    try {
+        const products = await product.find();
+        res.json(products);
+    } catch (error) {
+        res.status(400).json({
+            message: "Lỗi không tìm được sản phẩm"
+        })
+    }
 }
-export const update = (req, res) => {
-    res.json(product.map(item => item.id == req.params.id ? req.body : item));
+export const read = async (req, res) => {
+    const filter = { _id: req.params.id}
+    try {
+        const products = await product.findOne(filter);
+        res.json(products);
+    } catch (error) {
+        res.status(400).json({
+            message: "Lỗi không tìm được sản phẩm"
+        })
+    }
+}
+
+export const remove = async (req, res) => {
+    const condition = { _id: req.params.id}
+    try {
+        const products = await product.findOneAndDelete(condition);
+        res.json({
+            message: "Đã xóa thành công",
+            data: products
+        });
+    } catch (error) {
+        res.status(400).json({
+            message: "Lỗi không tìm được sản phẩm"
+        })
+    }
+}
+export const update = async (req, res) => {
+    const condition = { _id: req.params.id};
+    const doc = req.body;
+    const option = { new: true};
+    try {
+        const products = await product.findOneAndUpdate(condition, doc, option);
+        res.json(products);
+    } catch (error) {
+        res.status(400).json({
+            message: "Lỗi không tìm được sản phẩm"
+        })
+    }
 }
