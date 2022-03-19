@@ -1,29 +1,30 @@
-import express from 'express';
-import cors from 'cors';
-import morgan from 'morgan';
-import productRoute from '../routes/products';
+import express from "express";
 import mongoose from "mongoose";
+import morgan from "morgan";
+import cors from "cors";
+import productsRoute from "./routes/product";
 
 
-const app = express();
+const app = new express();
 
-// middleware
+// middewares
 app.use(cors());
 app.use(morgan('tiny'));
-app.use(express.json())
+app.use(express.json());
+
+// route
+app.use("/api",productsRoute);
 
 
-//route
-app.use("/api",productRoute);
-
-//connect database
+//connect db
 mongoose.connect("mongodb://0.0.0.0:27017/ngongquan")
-.then(() => console.log("Kết nối db thành công"))
-.catch((error)=> console.log(error))
+.then(()=>console.log("Kết nối thành công"))
+.catch((error)=>console.log(error));
 
 
-//connection
-const PORT = 3001;
-app.listen(PORT, () => {
-    console.log("Server is running port", PORT);
+
+const PORT= 3001;
+
+app.listen(PORT,() =>{
+    console.log("Server is running",PORT);
 })
