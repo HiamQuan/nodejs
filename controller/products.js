@@ -7,7 +7,7 @@ export const create = async (req, res) => {
         res.json(products)    
     } catch (error) {
         res.status(400).json({
-            message: "Không thêm được sản phẩm anh ei"
+            message: "Không thêm được sản phẩm"
         })
     }
 }
