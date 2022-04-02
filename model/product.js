@@ -10,6 +10,13 @@ const productSchema = new Schema({
     price: {
        type: Number,
        min: 0
+    },
+    category:{
+        type:String,
+        required:true,
+    },
+    img:{
+        type: String
     }
 
 });

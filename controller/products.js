@@ -61,3 +61,21 @@ export const update = async (req, res) => {
         })
     }
 }
+
+export const listByCategory = async (req, res) => { 
+    const category = {category:req.params.category}; 
+    try {
+        const products = await product.find(category);
+        res.json(products);
+    } catch (error) {
+        res.status(400).json({
+            message: "Lỗi không tìm được sản phẩm"
+        })
+    }
+}
+
+export const sort = async (req,res)=>{
+    console.log(req.params);
+    const products= await product.find().sort({[req.params.sort]:req.params.order});
+    res.json(products);
+}

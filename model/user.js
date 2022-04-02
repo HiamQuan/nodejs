@@ -1,21 +1,47 @@
-import mongoose,{Schema, ObjectId} from "mongoose";
-import isEmail from "validator/lib/isEmail";
-
+import mongoose, { Schema} from "mongoose";
+import { createHmac} from 'crypto'; 
 const userSchema = new Schema({
-    email:{
+    name: {
         type: String,
-        minlength: 5,
-        unique: true,
-        required: "Vui lòng điền email",
-        validate: [isEmail,'Điền đúng định dạng email'],
+        required: true,
+        maxLength: 30
     },
-    password:{
+    email: {
         type: String,
-        required: "Vui lòng điền email",
+        required: true
     },
-    role:
+    salt: {
+        type: String
+    },
+    password: {
+        type: String,
+        required: true
+    },
+    role: {
+        type: Number,
+        default: 0
+    },
+    img:{
+        type:String
+    }
+}, { timestamps: true});
 
-});
-
-
-export default mongoose.model("User",userSchema);
+userSchema.methods = {
+    authenticate(password){ //123456
+        return this.password == this.encrytPassword(password);
+    },
+    encrytPassword(password){
+        if(!password) return 
+        try {
+            return createHmac("sha256", "abcs").update(password).digest("hex");
+        } catch (error) {
+            console.log(error)
+        }
+    }
+}
+// trước khi execute .save() thì chạy middleware sau.
+userSchema.pre("save", function(next){
+    this.password = this.encrytPassword(this.password);
+    next();
+})
+export default mongoose.model('User', userSchema);

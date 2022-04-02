@@ -3,6 +3,7 @@ import cors from 'cors';
 import morgan from 'morgan';
 import productRoute from '../routes/products';
 import mongoose from "mongoose";
+import authRoute from '../routes/users';
 
 
 const app = express();
@@ -15,6 +16,7 @@ app.use(express.json())
 
 //route
 app.use("/api",productRoute);
+app.use("/api",authRoute);
 
 //connect database
 mongoose.connect("mongodb://0.0.0.0:27017/ngongquan")
