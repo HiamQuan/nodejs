@@ -79,3 +79,11 @@ export const sort = async (req,res)=>{
     const products= await product.find().sort({[req.params.sort]:req.params.order});
     res.json(products);
 }
+
+export const search = async(req,res) => {
+    const searchText = req.query.searchText;
+    console.log(req.query.searchText);
+    const result = {$text: {$search: searchText}}
+    const search = await product.find(result)
+    res.json(search)
+}

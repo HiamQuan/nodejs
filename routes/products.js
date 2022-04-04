@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { create, list, listByCategory, read, remove, sort, update } from '../controller/products';
+import { create, list, listByCategory, read, remove, search, sort, update } from '../controller/products';
 import { checkAuth, isAdmin,isAuth,requireSignin } from '../middlewares/checkAuth' 
 import { userById } from '../controller/user';
 const router = Router();
@@ -11,6 +11,7 @@ router.post('/products/:userId', requireSignin, isAuth, isAdmin,create);
 router.delete('/product/:id', checkAuth, remove);
 router.patch("/product/:id", checkAuth, update );
 router.get("/products/category=:category", checkAuth, listByCategory );
+router.get("/products?searchText=:search", checkAuth, search );
 router.param("userId", userById);
 router.get("/products_sort=:sort&_order=:order", checkAuth, sort );
 
