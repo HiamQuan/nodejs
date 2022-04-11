@@ -1,10 +1,14 @@
-import mongoose, { Schema} from "mongoose";
-import { createHmac} from 'crypto'; 
-const userSchema = new Schema({
-    name: {
+import mongoose from "mongoose";
+import { Schema } from "mongoose";
+import{ createHmac } from "crypto"
+
+
+const { ObjectId } = mongoose.Schema;
+
+const teacherSchema = new Schema({
+    name:{
         type: String,
-        required: true,
-        maxLength: 30
+        minlength:[5,"Tên quá ngắn"]
     },
     email: {
         type: String,
@@ -20,14 +24,22 @@ const userSchema = new Schema({
     },
     img:{
         type:String
+    },
+    experience:{
+        type: String,
+    },
+    available:{
+        type: String
     }
-}, { timestamps: true});
+    
+},{ timestamps : true});
 
-userSchema.methods = {
+teacherSchema.methods = {
     authenticate(password){ //123456
         return this.password == this.encrytPassword(password);
     },
     encrytPassword(password){
+        
         if(!password) return 
         try {
             return createHmac("sha256", "abcs").update(password).digest("hex");
@@ -37,8 +49,11 @@ userSchema.methods = {
     }
 }
 // trước khi execute .save() thì chạy middleware sau.
-userSchema.pre("save", function(next){
+teacherSchema.pre("save", function(next){
     this.password = this.encrytPassword(this.password);
     next();
 })
-export default mongoose.model('User', userSchema);
+
+
+
+export default mongoose.model("Teacher", teacherSchema);

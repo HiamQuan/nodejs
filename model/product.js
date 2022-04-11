@@ -5,7 +5,7 @@ import { Schema } from "mongoose";
 const productSchema = new Schema({
     name: {
         type:String,
-        minlength: 5
+        minlength: 5,
     },
     price: {
        type: Number,
@@ -22,10 +22,10 @@ const productSchema = new Schema({
         type: String,
         required:true
     }
-
+    
 });
 
-const clone = productSchema.clone();
+
 
 export default mongoose.model("Product", productSchema);
 

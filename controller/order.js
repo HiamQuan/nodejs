@@ -1,10 +1,10 @@
-import Users from "../model/user";
+import Order from "../model/order";
 
 // API thêm sản phẩm
 export const create = async (req, res) => {
     try {
-        const users = await new Users(req.body).save();
-        res.json(users)    
+        const order = await new Order(req.body).save();
+        res.json(order)    
     } catch (error) {
         res.status(400).json({
             message: "Không thêm được sản phẩm"
@@ -14,8 +14,8 @@ export const create = async (req, res) => {
 // API list sản phẩm
 export const list = async (req, res) => { 
     try {
-        const users = await Users.find();
-        res.json(users);
+        const order = await Order.find();
+        res.json(order);
     } catch (error) {
         res.status(400).json({
             message: "Lỗi không tìm được sản phẩm"
@@ -25,8 +25,8 @@ export const list = async (req, res) => {
 export const read = async (req, res) => {
     const filter = { _id: req.params.id}
     try {
-        const users = await Users.findOne(filter);
-        res.json(users);
+        const order = await Order.findOne(filter);
+        res.json(order);
     } catch (error) {
         res.status(400).json({
             message: "Lỗi không tìm được sản phẩm"
@@ -37,10 +37,10 @@ export const read = async (req, res) => {
 export const remove = async (req, res) => {
     const condition = { _id: req.params.id}
     try {
-        const users = await Users.findOneAndDelete(condition);
+        const order = await Order.findOneAndDelete(condition);
         res.json({
             message: "Đã xóa thành công",
-            data: users
+            data: order
         });
     } catch (error) {
         res.status(400).json({
@@ -53,8 +53,22 @@ export const update = async (req, res) => {
     const doc = req.body;
     const option = { new: true};
     try {
-        const users = await Users.findOneAndUpdate(condition, doc, option);
-        res.json(users);
+        const order = await Order.findOneAndUpdate(condition, doc, option);
+        res.json(order);
+    } catch (error) {
+        res.status(400).json({
+            message: "Lỗi không tìm được sản phẩm"
+        })
+    }
+}
+
+export const listByCategoryAndSort = async (req, res) => { 
+    const sortBy = req.query.sortBy ? req.query.sortBy : "";
+    const orderBy = req.query.orderBy ? req.query.orderBy : "";
+    const category = {category:req.params.category}; 
+    try {
+        const order = await Order.find(category).sort({[sortBy]: orderBy});
+        res.json(order);
     } catch (error) {
         res.status(400).json({
             message: "Lỗi không tìm được sản phẩm"
@@ -63,32 +77,15 @@ export const update = async (req, res) => {
 }
 
 
-
 export const search = async (req,res) => {
     // POST /search?q=inputtext
     const searchString = req.query.searchText ? req.query.searchText : "";
     console.log(searchString);
     try {
-        const result = Users.find({name: { $regex : new RegExp(searchString)}},(err,data)=>res.json(data));
+        const result = Order.find({name: { $regex : searchString, $options:"si" }},(err,data)=>res.json(data));
     } catch (error) {
         res.status(400).json({
             message: " Có lỗi gì đó rồi",
         })
-    }
-}
-
-
-export const userById = async (req, res, next, id) => {
-    try {
-        const user = await Users.findById(id).exec();
-        if(!user){
-            res.status(400).json({
-                message: "Không tìm thấy user"
-            })
-        }
-        req.profile = user;
-        next();
-    } catch (error) {
-        
     }
 }
