@@ -7,7 +7,7 @@ const router = Router();
 // resful API
 router.get('/orders', checkAuth, list);
 router.get('/order/:id', checkAuth, read);
-router.post('/orders/:userId', requireSignin, isAuth, isAdmin,create);
+router.post('/orders/:userId', requireSignin, isAuth,create);
 router.delete('/order/:id', checkAuth, remove);
 router.patch("/order/:id", checkAuth, update );
 router.get("/orders/category=:category", checkAuth, listByCategoryAndSort );

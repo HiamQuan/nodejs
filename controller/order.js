@@ -2,6 +2,7 @@ import Order from "../model/order";
 
 // API thêm sản phẩm
 export const create = async (req, res) => {
+    const userId = req.params;
     try {
         const order = await new Order(req.body).save();
         res.json(order)    
@@ -14,7 +15,11 @@ export const create = async (req, res) => {
 // API list sản phẩm
 export const list = async (req, res) => { 
     try {
-        const order = await Order.find();
+        const order = await Order.find({status:false})
+        .populate("userId")
+        .populate("productId")
+        .populate("teacherId")
+        .exec();
         res.json(order);
     } catch (error) {
         res.status(400).json({
@@ -52,6 +57,7 @@ export const update = async (req, res) => {
     const condition = { _id: req.params.id};
     const doc = req.body;
     const option = { new: true};
+
     try {
         const order = await Order.findOneAndUpdate(condition, doc, option);
         res.json(order);

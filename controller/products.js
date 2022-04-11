@@ -67,7 +67,7 @@ export const listByCategoryAndSort = async (req, res) => {
     const orderBy = req.query.orderBy ? req.query.orderBy : "asc";
     const category = {category:req.params.category}; 
     try {
-        const products = await product.find(category).sort({[sortBy]: orderBy}).limit(10);
+        const products = await product.find(category).sort({[sortBy]: orderBy});
         console.log(products);
         res.json(products);
     } catch (error) {

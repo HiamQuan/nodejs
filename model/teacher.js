@@ -3,7 +3,6 @@ import { Schema } from "mongoose";
 import{ createHmac } from "crypto"
 
 
-const { ObjectId } = mongoose.Schema;
 
 const teacherSchema = new Schema({
     name:{

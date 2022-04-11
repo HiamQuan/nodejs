@@ -17,13 +17,13 @@ const orderSchema = new Schema({
         type:ObjectId,
         ref:"Teacher"
     },
-    time:{
-      weekday:{
-          type: String
-      },
-      hour:{
-          type:String
-      }
+    schedule:{
+        day:{
+            type:String,
+        },
+        hour:{
+            type:String,
+        }
     },
     status:{
         type: Boolean,

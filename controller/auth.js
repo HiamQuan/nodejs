@@ -41,6 +41,17 @@ export const signin = async (req, res) => {
                     message: "Sai mật khẩu"
                 })
             }
+            const token = jwt.sign({_id: user._id }, "123456", { expiresIn: 60 * 360})
+
+            return res.json({
+                token,
+                user: {
+                    _id: user._id,
+                    email: user.email,
+                    name: user.name,
+                    role: user.role 
+                }
+            })
         }
         if(teacher)
         {
@@ -49,20 +60,21 @@ export const signin = async (req, res) => {
                     message: "Sai mật khẩu"
                 })
             }
+            const token = jwt.sign({_id: teacher._id }, "123456", { expiresIn: 60 * 360})
+
+            return res.json({
+                token,
+                user: {
+                    _id: teacher._id,
+                    email: teacher.email,
+                    name: teacher.name,
+                    role: teacher.role,
+                }
+            })
         }
     
 
-        const token = jwt.sign({_id: user._id }, "123456", { expiresIn: 60 * 360})
 
-        res.json({
-            token,
-            user: {
-                _id: user._id || teacher._id,
-                email: user.email || teacher.email,
-                name: user.name || teacher.name,
-                role: user.role || teacher.role
-            }
-        })
     } catch (error) {
         res.status(400).json({
             message:"Không tìm thấy user"
