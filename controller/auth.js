@@ -8,12 +8,12 @@ export const signup = async (req, res) => {
     try {
         const existUser = await User.findOne({email}).exec();
         if(existUser){
-            res.json({
+            return res.json({
                 message: "Email đã tồn tại"
             })
         };
         const user = await new User({email, name, password}).save();
-        res.json({
+        return res.json({
             user: {
                 _id: user._id,
                 email: user.email,

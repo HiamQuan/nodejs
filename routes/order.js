@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { create, list, listByCategoryAndSort, read, remove, search, update } from '../controller/order';
+import { create, list, listByCategoryAndSort, listByUser, read, remove, search, update } from '../controller/order';
 import { checkAuth, isAdmin,isAuth,requireSignin } from '../middlewares/checkAuth' 
 import { userById } from '../controller/user';
 const router = Router();
@@ -7,6 +7,7 @@ const router = Router();
 // resful API
 router.get('/orders', checkAuth, list);
 router.get('/order/:id', checkAuth, read);
+router.get('/orders/userId=:userId', checkAuth,listByUser);
 router.post('/orders/:userId', requireSignin, isAuth,create);
 router.delete('/order/:id', checkAuth, remove);
 router.patch("/order/:id", checkAuth, update );

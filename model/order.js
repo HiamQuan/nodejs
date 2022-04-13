@@ -17,6 +17,9 @@ const orderSchema = new Schema({
         type:ObjectId,
         ref:"Teacher"
     },
+    time:{
+        type:Date,
+    },
     schedule:{
         day:{
             type:String,

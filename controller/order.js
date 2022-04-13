@@ -95,3 +95,19 @@ export const search = async (req,res) => {
         })
     }
 }
+
+export const listByUser = async (req, res) => {
+    const filter = { userId: req.params.userId}
+    try {
+        const order = await Order.find(filter)
+        .populate("userId")
+        .populate("teacherId")
+        .populate("productId")
+        ;
+        res.json(order);
+    } catch (error) {
+        res.status(400).json({
+            message: "Lỗi không tìm được sản phẩm"
+        })
+    }
+}
